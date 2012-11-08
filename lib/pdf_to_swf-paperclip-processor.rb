@@ -1,6 +1,6 @@
 require "paperclip"
 module Paperclip
-    class PdfToSwf < Processor
+  class PdfToSwf < Processor
     
     attr_accessor :file, :params, :format
     
@@ -24,12 +24,11 @@ module Paperclip
         
         parameters = parameters.flatten.compact.join(" ").strip.squeeze(" ")
       
-        success = Paperclip.run("pdf2swf", parameters, :source => "#{File.expand_path(src.path)}",:dest => File.expand_path(dst.path))
+        Paperclip.run("pdf2swf", parameters, :source => "#{File.expand_path(src.path)}",:dest => File.expand_path(dst.path))
       rescue Cocaine::CommandLineError => e
-        raise PaperclipError, "There was an error converting #{@basename} to swf"
+        raise Paperclip::Errors::CommandNotFoundError, "There was an error converting #{@basename} to swf #{e}"
       end
       dst
     end
-    
   end
 end
